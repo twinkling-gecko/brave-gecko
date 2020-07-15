@@ -7,10 +7,13 @@ import (
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
+
+	"github.com/twinkling-gecko/brave-gecko/pkg/eventhandler"
+	"github.com/twinkling-gecko/brave-gecko/pkg/router"
 )
 
 var (
-	Token string = os.Getenv("DISCORD_TOKEN")
+	Token = os.Getenv("DISCORD_TOKEN")
 )
 
 func main() {
@@ -19,6 +22,9 @@ func main() {
 		fmt.Println("error creating Discord session,", err)
 		return
 	}
+
+	router.Init()
+	app.AddHandler(eventhandler.MessageCreateHandler)
 
 	err = app.Open()
 	if err != nil {
