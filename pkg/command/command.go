@@ -5,17 +5,19 @@ import (
 )
 
 type Command struct {
-	Name    string
-	Handler func(*discordgo.Session, *discordgo.MessageCreate)
+	Name        string // コマンド名
+	Description string // 書いておくとhelpに出る
+	Handler     func(*discordgo.Session, *discordgo.MessageCreate)
 }
 
 // TODO: コマンド増えてきたらファイルに分割する
 
 var Ping = Command{
-	Name:    "ping",
-	Handler: pingHandler,
+	Name:        "ping",
+	Description: "灼熱の卓球娘",
+	Handler:     pingHandler,
 }
 
 func pingHandler(session *discordgo.Session, event *discordgo.MessageCreate) {
-  session.ChannelMessageSend(event.ChannelID, "Pong!")
+	session.ChannelMessageSend(event.ChannelID, "Pong!")
 }
