@@ -16,7 +16,7 @@ type Command struct {
 }
 
 type MegurusayResponse struct {
-	Message     string `json:message`
+	Message string `json:message`
 }
 
 // TODO: コマンド増えてきたらファイルに分割する
@@ -57,9 +57,9 @@ func statusHandler(session *discordgo.Session, event *discordgo.MessageCreate) {
 }
 
 func megurusayHandler(session *discordgo.Session, event *discordgo.MessageCreate) {
-	api_url := "http://say.tatikaze.com/meguru"
+	apiUrl := "http://say.tatikaze.com/meguru"
 
-	res, err := http.Get(api_url)
+	res, err := http.Get(apiUrl)
 	if err != nil {
 		session.ChannelMessageSend(event.ChannelID, err.Error())
 		return
@@ -67,8 +67,7 @@ func megurusayHandler(session *discordgo.Session, event *discordgo.MessageCreate
 	defer res.Body.Close()
 
 	var megurusayResponse MegurusayResponse
-	err = json.NewDecoder(res.Body).Decode(&megurusayResponse)
-	if err != nil {
+	if err:= json.NewDecoder(res.Body).Decode(&megurusayResponse); err != nil {
 		session.ChannelMessageSend(event.ChannelID, err.Error())
 		return
 	}
