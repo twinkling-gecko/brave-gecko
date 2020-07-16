@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"encoding/json"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -12,6 +13,10 @@ type Command struct {
 	Name        string // コマンド名
 	Description string // 書いておくとhelpに出る
 	Handler     func(*discordgo.Session, *discordgo.MessageCreate)
+}
+
+type MegurusayResponse struct {
+	Message     string `json:message`
 }
 
 // TODO: コマンド増えてきたらファイルに分割する
@@ -26,6 +31,12 @@ var Status = Command{
 	Name:        "status",
 	Description: "第一引数のURIのステータスコードを返す",
 	Handler:     statusHandler,
+}
+
+var Megurusay = Command{
+	Name:        "megurusay",
+	Description: "めぐる、Discordで喋れるようになっちゃいました！",
+	Handler:     megurusayHandler,
 }
 
 func pingHandler(session *discordgo.Session, event *discordgo.MessageCreate) {
@@ -43,4 +54,24 @@ func statusHandler(session *discordgo.Session, event *discordgo.MessageCreate) {
 
   result := strconv.Itoa(res.StatusCode)
 	session.ChannelMessageSend(event.ChannelID, result)
+}
+
+func megurusayHandler(session *discordgo.Session, event *discordgo.MessageCreate) {
+	api_url := "http://say.tatikaze.com/meguru"
+
+	res, err := http.Get(api_url)
+	if err != nil {
+		session.ChannelMessageSend(event.ChannelID, err.Error())
+		return
+	}
+	defer res.Body.Close()
+
+	var megurusayResponse MegurusayResponse
+	err = json.NewDecoder(res.Body).Decode(&megurusayResponse)
+	if err != nil {
+		session.ChannelMessageSend(event.ChannelID, err.Error())
+		return
+	}
+
+	session.ChannelMessageSend(event.ChannelID, megurusayResponse.Message)
 }
