@@ -5,8 +5,9 @@ import (
 )
 
 type Command struct {
-	Name    string
-	Handler func(*discordgo.Session, *discordgo.MessageCreate)
+	Name        string
+	Description string
+	Handler     func(*discordgo.Session, *discordgo.MessageCreate)
 }
 
 // TODO: コマンド増えてきたらファイルに分割する
@@ -17,5 +18,5 @@ var Ping = Command{
 }
 
 func pingHandler(session *discordgo.Session, event *discordgo.MessageCreate) {
-  session.ChannelMessageSend(event.ChannelID, "Pong!")
+	session.ChannelMessageSend(event.ChannelID, "Pong!")
 }
