@@ -14,6 +14,7 @@ var (
 func Init() {
 	register(command.Ping)
 	register(command.Status)
+	register(command.Megurusay)
 }
 
 // 引数を元に指定コマンドを実行する
