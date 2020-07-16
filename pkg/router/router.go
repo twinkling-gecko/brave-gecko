@@ -13,6 +13,7 @@ var (
 
 func Init() {
 	register(command.Ping)
+	register(command.Status)
 }
 
 // 引数を元に指定コマンドを実行する
